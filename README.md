@@ -1,12 +1,12 @@
 # Note Book
 
-A GTK-based sticky notes application with integrated file organization and web-based code editing through Theia IDE evaluation.
+A GTK-based sticky notes application with integrated file organization and optional web-based code editing through Theia IDE evaluation.
 
 ## Features
 
 - **Sticky Notes**: Quick note taking with persistent storage
 - **File Organization**: Organize notes by projects and categories
-- **Theia IDE Integration**: Optional code editing environment (Theia Evaluation)
+- **Optional Theia IDE Integration**: Web-based code editing (install via github-install.sh)
 - **Progress Tracking**: Track progress notes and milestones
 - **GTK3 UI**: Native Linux desktop interface
 
@@ -29,8 +29,7 @@ bash install.sh
 This will:
 1. Verify Python 3 and GTK3 are installed
 2. Verify all dependencies
-3. Optionally install theia-evaluation
-4. Display launch instructions
+3. Display launch instructions
 
 ### Manual Installation
 
@@ -73,22 +72,29 @@ python3 manager.py
 Theia Evaluation provides a web-based code editor interface. To install:
 
 ```bash
-# See LAUNCHER_README.md for detailed instructions
-# Or run install.sh and choose to install theia-evaluation
+bash github-install.sh
 ```
+
+This script will:
+1. Check for existing Theia installation
+2. Prompt user to install theia-evaluation
+3. Set up the optional component for web-based code editing
+
+**Note**: Theia is completely optional. Note Book works perfectly fine without it.
 
 ## Project Structure
 
 ```
 Note Book/
 ├── LAUNCH_PROGRAM.sh           # Main launcher
+├── install.sh                  # Installation script
+├── github-install.sh           # GitHub optional components installer
 ├── Files/
 │   ├── manager.py              # Main application
 │   ├── note_extended.py        # Note extension module
-│   ├── theia-evaluation/       # Optional IDE
 │   └── notes/                  # Stored notes
 ├── Progress Notes/             # Progress tracking
-└── LAUNCHER_README.md          # Launcher documentation
+└── README.md                   # This file
 ```
 
 ## Usage Tips
@@ -97,7 +103,7 @@ Note Book/
 2. **Organizing**: Drag notes into categories
 3. **Searching**: Use the search feature to find notes quickly
 4. **Backing Up**: Notes are stored in `Files/notes/` directory
-5. **Web Editing**: Use Theia for editing code or complex notes
+5. **Web Editing**: After running github-install.sh, use Theia for editing code or complex notes
 
 ## Troubleshooting
 
@@ -110,8 +116,11 @@ python3 -c "import gi; gi.require_version('Gtk', '3.0'); from gi.repository impo
 ### Import Errors
 Re-run `bash install.sh` to verify all dependencies.
 
-### Theia Not Launching
-Ensure theia-evaluation is properly installed in `Files/` directory. See LAUNCHER_README.md for details.
+### Theia Not Available
+If you want web-based code editing, run:
+```bash
+bash github-install.sh
+```
 
 ### Display Issues
 If running over SSH, ensure X11 forwarding is enabled:
@@ -122,8 +131,8 @@ ssh -X user@host
 ## Performance Notes
 
 - Application is lightweight for note-taking
-- Theia IDE can be memory-intensive (requires significant RAM)
-- Theia is optional for basic note-taking functionality
+- Theia IDE (if installed) can be memory-intensive (requires significant RAM)
+- Theia is optional and does not impact core Note Book functionality
 
 ## License
 
@@ -131,4 +140,4 @@ This project is part of the Magi suite of tools.
 
 ## Author
 
-Terry Carry (terrycarry21)
+Terry Carry (terrycarry32)
