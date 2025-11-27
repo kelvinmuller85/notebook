@@ -1,0 +1,51 @@
+name: Note Book CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          python3-gi python3-gi-cairo \
+          gir1.2-gtk-3.0 gir1.2-gtksource-3.0 \
+          xvfb shellcheck
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-xvfb
+        pip install -r usb-installer/requirements-order.txt
+    
+    - name: Lint shell scripts
+      run: |
+        shellcheck usb-installer/prepare_target.sh
+        shellcheck usb-installer/install_in_proot.sh
+        shellcheck build.sh
+    
+    - name: Verify rootfs checksum (if present)
+      run: |
+        if [ -f usb-installer/rootfs-debian-book-*.tar.xz ]; then
+          cd usb-installer && sha256sum -c SHA256SUMS
+        else
+          echo "No rootfs tarball found - skipping checksum verification"
+        fi
+    
+    - name: Run tests under Xvfb
+      run: |
+        xvfb-run -a pytest tests/ -v

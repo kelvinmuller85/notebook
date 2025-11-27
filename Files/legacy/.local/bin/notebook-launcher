@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euo pipefail
+
+# Path definitions
+INSTALL_DIR="$HOME/.local/share/notebook"
+VENV_DIR="$HOME/.local/share/notebook_venv"
+ROOTFS_DIR="$HOME/.local/share/notebook_rootfs"
+LOG_FILE="$HOME/.local/share/notebook/launch.log"
+
+mkdir -p "$(dirname "$LOG_FILE")"
+exec 1> >(tee -a "$LOG_FILE")
+exec 2>&1
+
+echo "=== Note Book Launch $(date) ==="
+
+# Function to check if system has required GTK/GI packages
+check_system_libs() {
+    python3 -c "
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkSource', '3')
+from gi.repository import Gtk, GtkSource
+" 2>/dev/null
+}
+
+# First try direct execution
+if check_system_libs; then
+    echo "System libraries available, launching directly..."
+    source "$VENV_DIR/bin/activate"
+    exec python3 "$INSTALL_DIR/Files/notebook_wrapper.py"
+    exit 0
+fi
+
+# If direct launch fails, try running from Files directory
+echo "Trying to launch from Files directory..."
+cd "$INSTALL_DIR/Files"
+python3 ./notebook_wrapper.py

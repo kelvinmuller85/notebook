@@ -1,0 +1,81 @@
+#!/bin/bash
+set -uo pipefail
+
+# Configuration
+NOTEBOOK_DIR="$HOME/.local/share/notebook/Files"
+WRAPPER_PATH="$NOTEBOOK_DIR/notebook_wrapper.py"
+LOG_DIR="$HOME/.local/share/notebook/logs"
+LOG_FILE="$LOG_DIR/launcher.log"
+
+# Create log directory if it doesn't exist
+mkdir -p "$LOG_DIR"
+
+# Log function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+error() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1" | tee -a "$LOG_FILE" >&2
+    notify-send "Note Book Error" "$1" -i error
+    exit 1
+}
+
+# Set up environment
+setup_environment() {
+    log "Setting up environment..."
+    
+    # Basic environment setup
+    export PYTHONPATH="$NOTEBOOK_DIR${PYTHONPATH:+:$PYTHONPATH}"
+    export GI_TYPELIB_PATH="/usr/lib/x86_64-linux-gnu/girepository-1.0"
+    export XDG_DATA_DIRS="/usr/local/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+    
+    # Verify Python and GTK
+    if ! python3 -c "
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkSource', '4')
+from gi.repository import Gtk, GtkSource
+" 2>/dev/null; then
+        error "GTK environment not properly configured. Please reinstall the application."
+    fi
+    
+    log "Environment setup complete"
+}
+
+# Check required files
+check_files() {
+    log "Checking required files..."
+    
+    if [ ! -f "$WRAPPER_PATH" ]; then
+        error "notebook_wrapper.py not found in $NOTEBOOK_DIR"
+    fi
+    
+    if [ ! -r "$WRAPPER_PATH" ]; then
+        error "Cannot read notebook_wrapper.py. Check permissions."
+    fi
+    
+    log "File checks passed"
+}
+
+# Main execution
+main() {
+    log "=== Starting Note Book Launcher ==="
+    log "Python version: $(python3 --version)"
+    log "Current directory: $PWD"
+    
+    setup_environment
+    check_files
+    
+    log "Changing to notebook directory..."
+    cd "$NOTEBOOK_DIR" || error "Failed to change to notebook directory"
+    
+    log "Launching notebook_wrapper.py..."
+    exec python3 "$WRAPPER_PATH" "$@"
+}
+
+# Run main with error handling
+main "$@" || {
+    error_code=$?
+    error "Notebook failed to launch (exit code $error_code)"
+}

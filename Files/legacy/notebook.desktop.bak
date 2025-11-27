@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Note Book
+Comment=Advanced note-taking application with file organization
+Exec=/home/copsn/Desktop/Note Book/Files/launch_notebook.sh
+Icon=sticky
+Terminal=false
+Categories=Utility;Office;
+StartupNotify=true
+Path=/home/copsn/Desktop/Note Book/Files
