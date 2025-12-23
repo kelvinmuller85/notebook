@@ -1,3 +1,8 @@
+I will leave the description up for this program written in the code it's written in.  I refactored the program into C, and made a few adjustments to it, and switched to Windows.  I am not 100% sure if I want to publish my work ornot.  I didn't get an overwhelming response from the start of this program, and if I can't get a team together with the basic idea, I don't know if I'm confortable showing them what I have gotten it to in a couple days... It's evolving to be much much much more then a system of note taking..... And I don't know what else to say I guess.  If you try this and wonder what it's developed into, and have some skills yourself, try to message me somehow.  It disapoints me that despite throwing my first programs online, I didn't get any responses.  I guess that's the reality behind not knowing what you're doing very well.  The program did suck in a way.  But it's going to be a work of art.  I just wish I had 1 guy who knew as much as I do, who was interested in jumping into my ideas.  That's all it would take for me to be able to make a serious push at completion for varieties of systems that are all slowly but surly comming together into 1 massive system.
+
+
+
+
 This program is freekin sweet.  Inspired by the life energy of children, who loved the colors of the Note program in Linux Mint.
 
 It was then added with the life energy of various AI programmers, who were trying to help me make a system which could bipass what was supposed to be failed context windows, but ultimatly ended up being associated with a variety of viruses! lol..
